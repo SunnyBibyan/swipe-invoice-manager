@@ -10,7 +10,7 @@ export default function Navbar({ onGetStarted }) {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <div className="flex flex-col items-start ml-4">
-              <img src="/Public/brand_logo.svg" alt="Swipe Logo" className="h-8 w-auto" />
+              <img src="/brand_logo.svg" alt="Swipe Logo" className="h-8 w-auto" />
               <span className="text-xs text-gray-600">AI-Powered Invoice Management</span>
             </div>
           </div>
