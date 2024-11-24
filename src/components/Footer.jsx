@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-white text-lg font-semibold mb-4">Swipe</h3>
+            <img src="/Public/brand_logo.svg" alt="Swipe Logo" className="h-8 w-auto mb-4" />
             <p className="text-gray-300">
               Automated invoice management system powered by AI technology.
             </p>
@@ -36,7 +36,7 @@ export default function Footer() {
         </div>
         <div className="mt-8 border-t border-gray-700 pt-8">
           <p className="text-center text-gray-300">
-            © 2024 Swipe. All rights reserved.
+            &copy; 2024 Swipe. All rights reserved.
           </p>
         </div>
       </div>

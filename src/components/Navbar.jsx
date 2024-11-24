@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 
-export default function Navbar() {
+export default function Navbar({ onGetStarted }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -9,22 +9,28 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <div className="flex flex-col">
-              <span className="text-xl font-bold text-gray-900">Swipe</span>
+            <div className="flex flex-col items-start ml-4">
+              <img src="/Public/brand_logo.svg" alt="Swipe Logo" className="h-8 w-auto" />
               <span className="text-xs text-gray-600">AI-Powered Invoice Management</span>
             </div>
           </div>
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <a href="#templates" className="text-gray-700 hover:text-indigo-600">Templates</a>
-            <a href="#pricing" className="text-gray-700 hover:text-indigo-600">Pricing</a>
-            <a href="#faqs" className="text-gray-700 hover:text-indigo-600">FAQs</a>
-            <a href="#contact" className="text-gray-700 hover:text-indigo-600">Contact us</a>
-            <a href="/login" className="text-gray-700 hover:text-indigo-600">Login</a>
-            <a href="/signup" className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+            <nav>
+              <ul className="flex space-x-8">
+                <li><a href="#templates" className="text-gray-700 hover:text-indigo-600">Templates</a></li>
+                <li><a href="#pricing" className="text-gray-700 hover:text-indigo-600">Pricing</a></li>
+                <li><a href="#faqs" className="text-gray-700 hover:text-indigo-600">FAQs</a></li>
+                <li><a href="#contact" className="text-gray-700 hover:text-indigo-600">Contact us</a></li>
+              </ul>
+            </nav>
+            <button
+              onClick={onGetStarted}
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+            >
               Get Started
-            </a>
+            </button>
           </div>
 
           {/* Mobile menu button */}
@@ -64,14 +70,20 @@ export default function Navbar() {
         animate={{ opacity: isOpen ? 1 : 0, y: isOpen ? 0 : -10 }}
         transition={{ duration: 0.2 }}
       >
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          <a href="#templates" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Templates</a>
-          <a href="#pricing" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Pricing</a>
-          <a href="#faqs" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">FAQs</a>
-          <a href="#contact" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Contact us</a>
-          <a href="/login" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Login</a>
-          <a href="/signup" className="block w-full px-4 py-2 text-center font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md">Get Started</a>
-        </div>
+        <nav>
+          <ul className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <li><a href="#templates" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Templates</a></li>
+            <li><a href="#pricing" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Pricing</a></li>
+            <li><a href="#faqs" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">FAQs</a></li>
+            <li><a href="#contact" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Contact us</a></li>
+          </ul>
+        </nav>
+        <button
+          onClick={onGetStarted}
+          className="block w-full px-4 py-2 text-center font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md"
+        >
+          Get Started
+        </button>
       </motion.div>
     </nav>
   );
