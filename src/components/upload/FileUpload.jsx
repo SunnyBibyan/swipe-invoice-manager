@@ -1,14 +1,19 @@
 import React, { useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useDropzone } from 'react-dropzone';
 import { ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 import { processFile } from '../../utils/fileProcessor';
 import { setInitialData } from '../../store/slices/dashboardSlice';
+import { selectDashboardState } from '../../store/selectors';
 
 export default function FileUpload() {
   const dispatch = useDispatch();
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState(null);
+  const [uploadSummary, setUploadSummary] = useState(null);
+
+  // Get current state to check for duplicates
+  const currentState = useSelector(selectDashboardState);
 
   const transformDataForStore = (data) => {
     if (!data) return { invoices: [], products: [], customers: [] };
@@ -57,6 +62,26 @@ export default function FileUpload() {
     };
   };
 
+  const checkDuplicates = (newData) => {
+    const existingInvoiceNumbers = new Set(currentState.invoices.map(inv => inv.invoiceNumber));
+    const existingProductNames = new Set(currentState.products.map(prod => prod.name));
+    const existingCustomerIds = new Set(currentState.customers.map(cust => cust.email || cust.name));
+
+    const duplicates = {
+      invoices: newData.invoices.filter(inv => existingInvoiceNumbers.has(inv.invoiceNumber)),
+      products: newData.products.filter(prod => existingProductNames.has(prod.name)),
+      customers: newData.customers.filter(cust => existingCustomerIds.has(cust.email || cust.name))
+    };
+
+    const newItems = {
+      invoices: newData.invoices.filter(inv => !existingInvoiceNumbers.has(inv.invoiceNumber)),
+      products: newData.products.filter(prod => !existingProductNames.has(prod.name)),
+      customers: newData.customers.filter(cust => !existingCustomerIds.has(cust.email || cust.name))
+    };
+
+    return { duplicates, newItems };
+  };
+
   const onDrop = useCallback(async (acceptedFiles) => {
     if (acceptedFiles.length === 0) {
       setError('No files were selected');
@@ -65,28 +90,55 @@ export default function FileUpload() {
 
     setIsProcessing(true);
     setError(null);
+    setUploadSummary(null);
 
     try {
+      const summaries = [];
+
       for (const file of acceptedFiles) {
         console.log('Processing file:', file.name, 'Type:', file.type);
         const data = await processFile(file);
         console.log('Processed data:', data);
-        
+
         if (!data) {
           throw new Error(`No data could be extracted from ${file.name}`);
         }
 
-        // Transform and dispatch data
+        // Transform data and check for duplicates
         const transformedData = transformDataForStore(data);
-        dispatch(setInitialData(transformedData));
+        const { duplicates, newItems } = checkDuplicates(transformedData);
+
+        // Only dispatch if there are new items
+        if (Object.values(newItems).some(arr => arr.length > 0)) {
+          dispatch(setInitialData(newItems));
+        }
+
+        // Add to summary
+        summaries.push({
+          fileName: file.name,
+          new: {
+            invoices: newItems.invoices.length,
+            products: newItems.products.length,
+            customers: newItems.customers.length
+          },
+          existing: {
+            invoices: duplicates.invoices.length,
+            products: duplicates.products.length,
+            customers: duplicates.customers.length
+          }
+        });
       }
+
+      // Set upload summary
+      setUploadSummary(summaries);
+
     } catch (error) {
       console.error('Upload error:', error);
       setError(error.message || 'Failed to process files. Please check the file format and try again.');
     } finally {
       setIsProcessing(false);
     }
-  }, [dispatch]);
+  }, [dispatch, currentState]);
 
   const { getRootProps, getInputProps, isDragActive, fileRejections } = useDropzone({
     onDrop,
@@ -127,6 +179,34 @@ export default function FileUpload() {
       {error && (
         <div className="mt-4 text-center text-sm text-red-600">
           {error}
+        </div>
+      )}
+
+      {uploadSummary && (
+        <div className="mt-4 space-y-4">
+          {uploadSummary.map((summary, index) => (
+            <div key={index} className="text-sm bg-gray-50 rounded-lg p-4">
+              <p className="font-medium text-gray-900">{summary.fileName}</p>
+              <div className="mt-2 grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-green-600 font-medium">New Items Added:</p>
+                  <ul className="text-gray-600 mt-1">
+                    <li>Invoices: {summary.new.invoices}</li>
+                    <li>Products: {summary.new.products}</li>
+                    <li>Customers: {summary.new.customers}</li>
+                  </ul>
+                </div>
+                <div>
+                  <p className="text-gray-600 font-medium">Already Existing:</p>
+                  <ul className="text-gray-500 mt-1">
+                    <li>Invoices: {summary.existing.invoices}</li>
+                    <li>Products: {summary.existing.products}</li>
+                    <li>Customers: {summary.existing.customers}</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       )}
 

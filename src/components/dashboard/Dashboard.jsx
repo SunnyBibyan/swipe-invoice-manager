@@ -4,13 +4,10 @@ import { Link } from 'react-router-dom';
 import FileUpload from '../upload/FileUpload';
 import DataTabs from './DataTabs';
 import { motion } from 'framer-motion';
+import { selectDashboardState } from '../../store/selectors';
 
 export default function Dashboard() {
-  const data = useSelector((state) => ({
-    invoices: state.dashboard.invoices || [],
-    products: state.dashboard.products || [],
-    customers: state.dashboard.customers || []
-  }));
+  const data = useSelector(selectDashboardState);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -20,7 +17,7 @@ export default function Dashboard() {
           <div className="flex justify-between h-16">
             <div className="flex items-center">
               <div className="flex flex-col items-start ml-4">
-                <img src="/Public/brand_logo.svg" alt="Swipe Logo" className="h-8 w-auto" />
+                <img src="/brand_logo.svg" alt="Swipe Logo" className="h-8 w-auto" />
                 <span className="text-xs text-gray-600">AI-Powered Invoice Management</span>
               </div>
             </div>

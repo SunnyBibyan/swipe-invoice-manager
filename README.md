@@ -1,116 +1,89 @@
 # Swipe Invoice Manager
 
-A modern, AI-powered invoice management system built with the MERN stack.
+An AI-powered invoice management system built with React, Vite, and modern web technologies.
 
-![Dashboard Screenshot](docs/screenshots/dashboard.png)
+## 🚀 Features
 
-## Features
-
-- 🤖 AI-Powered Data Extraction
-- 📊 Real-time Data Visualization
+- 📄 Smart Invoice Processing
+- 👥 Customer Management
+- 📦 Product Catalog
+- 📊 Dashboard Analytics
+- 🔄 Real-time Data Sync with Firebase
+- 🎨 Modern UI with Tailwind CSS
 - 📱 Responsive Design
-- 🔄 Cross-tab Data Synchronization
-- ✨ Modern UI/UX
+- 🤖 AI-powered data extraction
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-- **Frontend**: React, Redux Toolkit, Tailwind CSS, Framer Motion
-- **Backend**: Node.js, Express
-- **Database**: MongoDB
-- **AI/ML**: TensorFlow.js for OCR, Custom NLP models
+- **Frontend Framework:** React 18
+- **Build Tool:** Vite
+- **Styling:** Tailwind CSS
+- **State Management:** Redux Toolkit
+- **Routing:** React Router DOM
+- **UI Components:** Headless UI, Hero Icons
+- **Animations:** Framer Motion
+- **PDF Processing:** React PDF, PDF-lib
+- **File Handling:** React Dropzone
+- **Database & Auth:** Firebase
+- **AI Integration:** Google Generative AI
 
-## Getting Started
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (Latest LTS version recommended)
+- npm or yarn
+- Firebase account
+
+### Installation
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/swipe-invoice-manager.git
-   cd swipe-invoice-manager
-   ```
+```bash
+git clone [your-repo-url]
+cd swipe-invoice-manager
+```
 
 2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Start the development server:
-   ```bash
-   npm start
-   ```
-
-## AI Data Extraction
-
-The system uses advanced AI to extract data from invoices:
-
-1. **OCR Processing**:
-   - TensorFlow.js for text recognition
-   - Custom image preprocessing
-   - Multi-format support (PDF, images)
-
-2. **Data Parsing**:
-   - NLP-based entity recognition
-   - Pattern matching for dates, amounts
-   - Contextual field extraction
-
-3. **Accuracy Improvement**:
-   - Machine learning for field classification
-   - Historical data training
-   - User feedback integration
-
-## Component Structure
-
-```
-src/
-├── components/
-│   ├── common/          # Reusable components
-│   ├── dashboard/       # Dashboard-specific components
-│   └── auth/           # Authentication components
-├── store/
-│   ├── slices/         # Redux slices
-│   └── store.js        # Redux store configuration
-├── utils/
-│   └── validation.js   # Validation utilities
-└── contexts/
-    └── ToastContext.js # Toast notification context
+```bash
+npm install
 ```
 
-## Test Cases
+3. Create a `.env` file based on `.env.example` and add your configuration:
+```env
+VITE_FIREBASE_CONFIG=your_firebase_config
+VITE_GOOGLE_AI_KEY=your_google_ai_key
+```
 
-### 1. Invoice Upload and Processing
-![Invoice Upload](docs/screenshots/invoice-upload.gif)
-- ✅ PDF upload
-- ✅ Image upload
-- ✅ Multi-file upload
-- ✅ Progress indication
-- ✅ Error handling
+4. Start the development server:
+```bash
+npm run dev
+```
 
-### 2. Data Extraction Accuracy
-![Data Extraction](docs/screenshots/data-extraction.gif)
-- ✅ Field recognition
-- ✅ Amount calculation
-- ✅ Date parsing
-- ✅ Customer/Product matching
+## 🏗️ Build
 
-### 3. Cross-tab Updates
-![Real-time Updates](docs/screenshots/real-time-updates.gif)
-- ✅ Product updates reflect in invoices
-- ✅ Customer updates sync across tabs
-- ✅ Real-time calculations
+To build for production:
+```bash
+npm run build
+```
 
-### 4. Validation and Error Handling
-![Validation](docs/screenshots/validation.gif)
-- ✅ Field validation
-- ✅ File type validation
-- ✅ Size limits
-- ✅ Error notifications
+To preview the production build:
+```bash
+npm run preview
+```
 
-## Contributing
+## 📝 Project Structure
 
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+- `/src` - Source code
+  - `/components` - React components
+  - `/dashboard` - Dashboard related components
+  - `/upload` - File upload components
+- `/public` - Static assets
+- `/docs` - Documentation
 
-## License
+## 🤝 Contributing
 
-MIT License - see LICENSE.md
+Contributions, issues, and feature requests are welcome!
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.

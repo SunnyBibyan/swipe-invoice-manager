@@ -8,9 +8,9 @@ class AIExtractionService {
 
         // Define required fields for validation
         this.requiredFields = {
-            invoice: ['invoiceNumber', 'date', 'dueDate', 'totalAmount', 'status'],
-            customer: ['name', 'email', 'phone', 'address'],
-            product: ['name', 'price', 'quantity', 'category']
+            invoice: ['invoice_number', 'customer_name', 'date', 'total_amount', 'items'],
+            customer: ['name','email','phone','address','total_purchases','last_purchase'],
+            product: ['name', 'quantity', 'price_per_item', 'tax', 'price_with_tax', 'discount']
         };
     }
 
@@ -80,19 +80,77 @@ class AIExtractionService {
 
     async extractWithVisionAPI(base64Image, fileType) {
         try {
-            const prompt = `Please analyze this ${fileType} document and extract the following information in JSON format:
-                1. Invoice details: invoice number, date, due date, total amount, status
-                2. Customer details: name, email, phone, address
-                3. Product details: array of products with name, price, quantity, category
+            // const prompt = `Please analyze this ${fileType} document and extract the following information in JSON format:
+            //     1. Invoice details: invoice number, date, due date, total purchases amount, status
+            //     2. Customer details: name, email, phone, address
+            //     3. Product details: array of products with name, price, quantity, category
                 
-                Format the response as:
+            //     Format the response as:
+            //     {
+            //         "invoice": { ... },
+            //         "customer": { ... },
+            //         "products": [ ... ]
+            //     }
+                
+            //     If any information is missing, please indicate "missing" for that field.`;
+                const prompt = `Please analyze the spreadsheet content and extract the following information in JSON format:
+
+                1. Invoice details: Extract the invoice number, customer name, date, total amount, and a list of items (with item name, quantity, and total price for each item).  
+                   Example format:
+                   {
+                      "invoice_number": "12345",
+                      "customer_name": "John Doe",
+                      "date": "2024-01-01",
+                      "total_amount": "500",
+                      "items": [
+                         {
+                            "item_name": "Product A",
+                            "quantity": 2,
+                            "total_price": "200"
+                         },
+                         {
+                            "item_name": "Product B",
+                            "quantity": 3,
+                            "total_price": "300"
+                         }
+                      ]
+                   }
+                
+                2. Product details: Provide an array of all products, with the following fields: name, quantity, price per item, tax, price with tax, and discount.  
+                   Example format:
+                   {
+                      "products": [
+                         {
+                            "name": "Product A",
+                            "quantity": 5,
+                            "price_per_item": "50",
+                            "tax": "5",
+                            "price_with_tax": "55",
+                            "discount": "10%"
+                         },
+                         ...
+                      ]
+                   }
+                
+                3. Customer details: Extract customer information including name, email, phone, address, total purchases, and last purchase date.  
+                   Example format:
+                   {
+                      "customer": {
+                         "name": "John Doe",
+                         "email": "john.doe@example.com",
+                         "phone": "123-456-7890",
+                         "address": "123 Main St, City, Country",
+                         "total_purchases": "1500",
+                         "last_purchase": "2024-01-15"
+                      }
+                   }
+                
+                If any information is missing, indicate "missing" for that field. Format the entire response as:
                 {
-                    "invoice": { ... },
-                    "customer": { ... },
-                    "products": [ ... ]
-                }
-                
-                If any information is missing, please indicate "missing" for that field.`;
+                   "invoice": { ... },
+                   "products": [ ... ],
+                   "customer": { ... }
+                }`;
 
             const imageData = {
                 inlineData: {
@@ -114,22 +172,86 @@ class AIExtractionService {
 
     async extractWithTextAPI(textContent) {
         try {
-            const prompt = `Please analyze this spreadsheet content and extract the following information in JSON format:
-                1. Invoice details: invoice number, date, due date, total amount, status
-                2. Customer details: name, email, phone, address
-                3. Product details: array of products with name, price, quantity, category
+            // const prompt = `Please analyze this spreadsheet content and extract the following information in JSON format:
+            //     1. Invoice details: invoice number, date, due date, total amount, status
+            //     2. Customer details: name, email, phone, address
+            //     3. Product details: array of products with name, price, quantity, category
                 
-                Spreadsheet content:
-                ${textContent}
+            //     Spreadsheet content:
+            //     ${textContent}
                 
-                Format the response as:
-                {
-                    "invoice": { ... },
-                    "customer": { ... },
-                    "products": [ ... ]
-                }
+            //     Format the response as:
+            //     {
+            //         "invoice": { ... },
+            //         "customer": { ... },
+            //         "products": [ ... ]
+            //     }
                 
-                If any information is missing, please indicate "missing" for that field.`;
+            //     If any information is missing, please indicate "missing" for that field.`;
+            
+            const prompt = `Please analyze the spreadsheet content and extract the following information in JSON format:
+
+            1. Invoice details: Extract the invoice number, customer name, date, total amount, and a list of items (with item name, quantity, and total price for each item).  
+               Example format:
+               {
+                  "invoice_number": "12345",
+                  "customer_name": "John Doe",
+                  "date": "2024-01-01",
+                  "total_amount": "500",
+                  "items": [
+                     {
+                        "item_name": "Product A",
+                        "quantity": 2,
+                        "total_price": "200"
+                     },
+                     {
+                        "item_name": "Product B",
+                        "quantity": 3,
+                        "total_price": "300"
+                     }
+                  ]
+               }
+            
+            2. Product details: Provide an array of all products, with the following fields: name, quantity, price per item, tax, price with tax, and discount.  
+               Example format:
+               {
+                  "products": [
+                     {
+                        "name": "Product A",
+                        "quantity": 5,
+                        "price_per_item": "50",
+                        "tax": "5",
+                        "price_with_tax": "55",
+                        "discount": "10%"
+                     },
+                     ...
+                  ]
+               }
+            
+            3. Customer details: Extract customer information including name, email, phone, address, total purchases, and last purchase date.  
+               Example format:
+               {
+                  "customer": {
+                     "name": "John Doe",
+                     "email": "john.doe@example.com",
+                     "phone": "123-456-7890",
+                     "address": "123 Main St, City, Country",
+                     "total_purchases": "1500",
+                     "last_purchase": "2024-01-15"
+                  }
+               }
+            
+            Spreadsheet content:
+            ${textContent}
+            
+            If any information is missing, indicate "missing" for that field. Format the entire response as:
+            {
+               "invoice": { ... },
+               "products": [ ... ],
+               "customer": { ... }
+            }`;
+              
+                
 
             const result = await this.textModel.generateContent(prompt);
             const response = await result.response;

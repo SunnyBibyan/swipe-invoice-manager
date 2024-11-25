@@ -83,7 +83,7 @@ async function processExcel(file) {
 
     // Calculate total purchase amount including tax
     const totalPurchaseAmount = products.reduce((sum, product) => 
-      sum + (product.priceWithTax * product.quantity), 0);
+      sum + (product.priceWithTax * product.quantity ), 0);
 
     const formattedData = {
       invoice: {
@@ -131,7 +131,7 @@ async function processPDF(file) {
     })).filter(product => product.name && product.name !== '');
 
     const totalAmount = products.reduce((sum, product) => 
-      sum + (product.priceWithTax * product.quantity), 0);
+      sum + (product.priceWithTax * product.quantity ), 0);
 
     const formattedData = {
       invoice: {
@@ -178,7 +178,7 @@ async function processImage(file) {
     })).filter(product => product.name && product.name !== '');
 
     const totalAmount = products.reduce((sum, product) => 
-      sum + (product.priceWithTax * product.quantity), 0);
+      sum + (product.priceWithTax ), 0);
 
     const formattedData = {
       invoice: {

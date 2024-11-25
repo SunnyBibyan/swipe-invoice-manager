@@ -76,7 +76,7 @@ export const dashboardSlice = createSlice({
       const invoice = action.payload;
       state.invoices.push(invoice);
 
-      // Update product quantity
+      // // Update product quantity
       const product = state.products.find(p => p.name === invoice.productName);
       if (product) {
         product.quantity = Math.max(0, product.quantity - invoice.quantity);
@@ -102,9 +102,29 @@ export const dashboardSlice = createSlice({
     // Bulk actions
     setInitialData: (state, action) => {
       const { invoices, products, customers } = action.payload;
-      state.invoices = invoices || [];
-      state.products = products || [];
-      state.customers = customers || [];
+      
+      // Merge invoices, using invoice number as unique identifier
+      if (invoices) {
+        const existingInvoiceNumbers = new Set(state.invoices.map(inv => inv.invoiceNumber));
+        const newInvoices = invoices.filter(inv => !existingInvoiceNumbers.has(inv.invoiceNumber));
+        state.invoices = [...state.invoices, ...newInvoices];
+      }
+      
+      // Merge products, using name as unique identifier
+      if (products) {
+        const existingProductNames = new Set(state.products.map(prod => prod.name));
+        const newProducts = products.filter(prod => !existingProductNames.has(prod.name));
+        state.products = [...state.products, ...newProducts];
+      }
+      
+      // Merge customers, using name or email as unique identifier
+      if (customers) {
+        const existingCustomerIds = new Set(state.customers.map(cust => cust.email || cust.name));
+        const newCustomers = customers.filter(cust => 
+          !existingCustomerIds.has(cust.email || cust.name)
+        );
+        state.customers = [...state.customers, ...newCustomers];
+      }
     },
   },
 });
