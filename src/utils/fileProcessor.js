@@ -82,8 +82,9 @@ async function processExcel(file) {
     }).filter(product => product.name && product.name !== '');
 
     // Calculate total purchase amount including tax
-    const totalPurchaseAmount = products.reduce((sum, product) => 
-      sum + (product.priceWithTax * product.quantity ), 0);
+    // const totalPurchaseAmount = products.reduce((sum, product) => 
+    //   sum + (product.priceWithTax * product.quantity ), 0);
+    const totalPurchaseAmount = firstInvoice['Total Amount'] || firstInvoice['Net Total'] || firstInvoice['Invoice Total'] || firstInvoice['Grand Total'] || 0;
 
     const formattedData = {
       invoice: {
@@ -130,9 +131,13 @@ async function processPDF(file) {
       discount: parseFloat(product.discount || '0')
     })).filter(product => product.name && product.name !== '');
 
-    const totalAmount = products.reduce((sum, product) => 
-      sum + (product.priceWithTax * product.quantity ), 0);
-
+    // const totalAmount = products.reduce((sum, product) => 
+    //   sum + (product.priceWithTax * product.quantity ), 0);
+    
+    // Use the AI extracted total amount directly
+     const totalAmount = extractedData.invoice?.totalAmount || 0;
+   
+   
     const formattedData = {
       invoice: {
         invoiceNumber: extractedData.invoice?.invoiceNumber || 'INV-' + new Date().getTime(),
@@ -177,8 +182,12 @@ async function processImage(file) {
       discount: parseFloat(product.discount || '0')
     })).filter(product => product.name && product.name !== '');
 
-    const totalAmount = products.reduce((sum, product) => 
-      sum + (product.priceWithTax ), 0);
+    // const totalAmount = products.reduce((sum, product) => 
+    //   sum + (product.priceWithTax ), 0);
+    
+       
+    // Use the AI extracted total amount directly
+    const totalAmount = extractedData.invoice?.totalAmount || 0;
 
     const formattedData = {
       invoice: {

@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <img src="/Public/brand_logo.svg" alt="Swipe Logo" className="h-8 w-auto mb-4" />
+            <img src="/brand_logo.svg" alt="Swipe Logo" className="h-8 w-auto mb-4" />
             <p className="text-gray-300">
               Automated invoice management system powered by AI technology.
             </p>
